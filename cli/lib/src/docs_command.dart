@@ -60,10 +60,8 @@ class DocsCommand extends Command<int> {
 
   Directory _resolveStoreRoot(ProjectConfig? config) {
     final home = Directory(p.join(Platform.environment['HOME'] ?? '.', '.fcn'));
-    final source = argResults?['source'] as String?;
-    if (source != null) return StoreCache(homeDir: home).resolve(source);
-    if (config != null) return StoreCache(homeDir: home).resolve(config.source);
-    return Directory(p.join(home.path, 'store'));
+    final source = argResults?['source'] as String? ?? config?.source;
+    return StoreCache(homeDir: home).resolve(source);
   }
 
   int _printIndex(List<Snippet> snippets, DocsStore docsStore, ProjectConfig? config, {required bool json}) {
