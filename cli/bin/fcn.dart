@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:args/command_runner.dart';
 import 'package:fcn/src/add_command.dart';
 import 'package:fcn/src/diff_command.dart';
+import 'package:fcn/src/docs_command.dart';
 import 'package:fcn/src/fcn_version.dart';
 import 'package:fcn/src/init_command.dart';
 import 'package:fcn/src/list_command.dart';
@@ -19,6 +20,7 @@ Future<void> main(List<String> arguments) async {
     ..addCommand(ListCommand())
     ..addCommand(AddCommand())
     ..addCommand(DiffCommand())
+    ..addCommand(DocsCommand())
     ..addCommand(UpgradeCommand());
 
   try {

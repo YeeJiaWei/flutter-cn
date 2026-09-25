@@ -44,6 +44,8 @@ fcn init --dir lib/ui/components                                    # writes fcn
 fcn list                                                          # browse what's available
 fcn add button confirm_dialog PrimaryButton                       # copy by file name or symbol
 fcn diff                                                          # see what's changed since you copied
+fcn docs                                                          # index of every component's usage doc
+fcn docs button                                                   # print one component's usage doc
 fcn upgrade                                                       # re-run the hosted installer
 fcn --version                                                     # print the installed fcn version
 ```
@@ -61,6 +63,21 @@ fcn --version                                                     # print the in
 - `fcn diff [name]` runs `git diff --no-index` between the store's current version and your project's copy,
   for the one snippet named, or every installed snippet when no name is given. Exits `0` when
   everything matches.
+- `fcn docs [name]` shows a component's usage doc from `docs/components/`.
+  - No name: an index of every component, grouped by folder, with its `use_when`/`avoid_when`
+    and an `[installed]` mark for ones your `fcn.json` already lists. A component with no doc
+    yet shows `(no doc)`.
+  - A name (bare file name, `folder/name`, or a public symbol, resolved the same way as
+    `fcn add`): the component's full doc.
+  - `--json` on either form prints machine-readable JSON instead.
+  - `--check` (for store maintainers and CI) validates every component has a doc, every doc
+    has a component, and each doc's front matter is complete and accurate — no
+    `use_when`/`avoid_when` missing, `symbols` matching the source file, and every `related`
+    entry resolving. Prints one line per problem and exits `1`, or a summary and exits `0`
+    when everything's in sync.
+  - Resolves the store the same way as the other commands (`fcn.json`'s `source`, falling back
+    to `~/.fcn/store`), plus its own `--source <path or git URL>` to point at a store directly
+    without a `fcn.json`.
 
 ## fcn.json
 

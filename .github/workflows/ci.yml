@@ -23,6 +23,9 @@ jobs:
       - name: dart test
         working-directory: cli
         run: dart test
+      - name: fcn docs --check
+        working-directory: cli
+        run: dart run bin/fcn.dart docs --check --source ..
 
   widgetbook:
     runs-on: ubuntu-latest
