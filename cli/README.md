@@ -1,0 +1,75 @@
+# fcn — the flutter-snippets CLI
+
+A shadcn/ui-style `add` command for this store: pulls the store to your machine, then copies
+just the components you ask for (and whatever they import) into your project, unchanged.
+
+## Install
+
+macOS / Linux, one-line installer (downloads the prebuilt `fcn` binary from the latest
+GitHub Release, or builds from source if none matches your OS/arch yet):
+
+```sh
+curl -fsSL https://raw.githubusercontent.com/YeeJiaWei/flutter-cn/main/install.sh | bash
+```
+
+Windows (PowerShell):
+
+```powershell
+irm https://raw.githubusercontent.com/YeeJiaWei/flutter-cn/main/install.ps1 | iex
+```
+
+For a private fork, or while developing the store locally, point `FCN_REPO` at it (used
+only for cloning/pulling the snippet store, not the `fcn` binary itself):
+
+```sh
+git clone <repo-url> flutter-snippets
+FCN_REPO=$(pwd)/flutter-snippets bash flutter-snippets/install.sh
+```
+
+Both scripts are idempotent — re-run them (or run `fcn upgrade`) any time to pull the
+latest store and update the `fcn` binary. They install to `~/.fcn/bin/fcn` (`.exe` on
+Windows), clone/pull the store to `~/.fcn/store`, and add `~/.fcn/bin` to your PATH
+(`~/.zshrc` / `~/.bashrc` / `~/.profile` on macOS/Linux; the user PATH on Windows).
+
+- `FCN_VERSION=v1.2.3` pins the install to a specific release instead of the latest.
+- `FCN_BUILD_FROM_SOURCE=1` skips the prebuilt binary and compiles from source with Dart
+  (also the automatic fallback when no release exists yet, or your OS/arch isn't built).
+
+## Commands
+
+```sh
+cd your_app
+
+fcn init --source <store path or git URL> --dir lib/ui/snippets   # writes fcn.json
+fcn list                                                          # browse what's available
+fcn add button confirm_dialog PrimaryButton                       # copy by file name or symbol
+fcn diff                                                          # see what's changed since you copied
+fcn upgrade                                                       # re-run the hosted installer
+fcn --version                                                     # print the installed fcn version
+```
+
+- `fcn init` asks for `--source`/`--dir` interactively if you don't pass them.
+- `fcn add <name...>` matches a name against a snippet file (`button`, `dialogs/confirm_dialog`)
+  or a public symbol it exports (`PrimaryButton`, `showConfirmDialog`). When a bare name matches
+  more than one file, pass `folder/name` instead. It follows relative imports to pull in
+  whatever else a snippet needs, and adds any missing pub package with `flutter pub add`
+  (skip with `--no-pub`). Existing files are left alone unless you pass `--overwrite`.
+  `--dry-run` prints what would happen without touching anything.
+- `fcn diff [name]` runs `git diff --no-index` between the store's current version and your project's copy,
+  for the one snippet named, or every installed snippet when no name is given. Exits `0` when
+  everything matches.
+
+## fcn.json
+
+Written by `fcn init` at the project root, next to `pubspec.yaml`:
+
+```json
+{
+  "source": "https://…/flutter-snippets.git",
+  "dir": "lib/ui/snippets",
+  "installed": { "buttons/button.dart": "<store commit sha>" }
+}
+```
+
+`installed` records where each file came from without editing the file itself; `fcn diff`
+reads it to know what to compare.

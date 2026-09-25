@@ -1,0 +1,42 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  cli:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dart-lang/setup-dart@v1
+        with:
+          sdk: stable
+      - name: dart pub get
+        working-directory: cli
+        run: dart pub get
+      - name: dart analyze
+        working-directory: cli
+        run: dart analyze
+      - name: dart test
+        working-directory: cli
+        run: dart test
+
+  widgetbook:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+      - name: flutter pub get
+        working-directory: widgetbook
+        run: flutter pub get
+      - name: flutter analyze
+        working-directory: widgetbook
+        run: flutter analyze
+      - name: flutter build web
+        working-directory: widgetbook
+        run: flutter build web
