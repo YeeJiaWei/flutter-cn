@@ -1,0 +1,8 @@
+{
+  "name": "flutter-cn",
+  "owner": { "name": "Yee Jia Wei" },
+  "description": "flutter-cn: a shadcn-style, copy-in Flutter component store — Claude Code skills and a hook so consuming projects reach for `fcn docs`/`fcn add` instead of hand-writing UI.",
+  "plugins": [
+    { "name": "flutter-cn", "source": "./plugins/flutter-cn", "description": "flutter-cn: reach for the copy-in component store before hand-writing Flutter UI — fcn docs/add/init skills and a project-detection hook." }
+  ]
+}
