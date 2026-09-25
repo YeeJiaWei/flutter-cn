@@ -64,9 +64,9 @@ Sibling projects that consume it live next door under `~/projects/etcteam/` (the
 2. Place it under `components/`, in the folder that matches its role: `buttons/ cards/
    chips/ dialogs/ feedback/ inputs/ layout/ media/ pickers/`. Add a folder only when none
    fits. Nothing but component folders lives in `components/`; tooling stays at the root.
-3. Add one line to the README catalogue (path, class(es), one-phrase purpose), linking it to
-   its doc under `docs/components/`, and, if a pub dependency is needed, one line to
-   "Dependencies some snippets need".
+3. Add its name to the README "Snippets" table row for its folder, linked to its doc under
+   `docs/components/` (names only — the details live in the doc), and, if a pub dependency is
+   needed, one line to "Dependencies some snippets need".
 4. Write its usage doc at `docs/components/<folder>/<file>.md` (front matter `name`, `symbols`,
    `use_when`, `avoid_when`, `related`, then When to use / When not to use / Usage / Key
    parameters / Bind to your tokens). A snippet without a doc is not done; `fcn docs --check`

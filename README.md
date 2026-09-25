@@ -1,33 +1,78 @@
-# flutter-snippets
+# flutter-cn
 
-A copy-in library of token-free Flutter widgets. The store itself is **not** a Dart
-package — it has no `pubspec.yaml` and is never added as a dependency. (`widgetbook/` is a
-separate Flutter app with its own `pubspec.yaml`, used only to browse the store; it is
-never copied into a project — see below.)
+**shadcn/ui for Flutter.** A library of token-free Flutter widgets that you *copy into your
+project and own*, instead of installing as a dependency. Every visual value is a constructor
+parameter with a plain default, so binding them to your design tokens is a find-and-replace.
+
+The store itself is **not** a Dart package — it has no root `pubspec.yaml` and is never added
+as a dependency. Components live in `components/`, their usage docs in `docs/components/`.
 
 ## Install
 
-macOS / Linux:
+Pick one. Both end the same way: component files copied into your project under
+`lib/ui/components/<folder>/`, owned by you.
+
+### Option A — Claude Code plugin (marketplace)
+
+In Claude Code, add the marketplace and install the plugin. This is the only manual step:
+
+```
+/plugin marketplace add YeeJiaWei/flutter-cn
+/plugin install flutter-cn@flutter-cn
+```
+
+From then on Claude does the rest:
+
+- installs the `fcn` CLI the first time it needs it (into `~/.fcn`);
+- runs `fcn init` in the project (default `lib/ui/components`);
+- checks `fcn docs` for a fitting component before hand-writing a widget, and pulls it in with
+  `fcn add`, reading its usage doc first.
+
+You can also drive it yourself:
+
+| Skill | What it does |
+|---|---|
+| `/flutter-cn:docs [name]` | Component index, or one component's usage doc |
+| `/flutter-cn:add <names…>` | Copy components (plus what they import) into the project |
+| `/flutter-cn:init [dir]` | Set the project up with a specific components folder |
+
+Update with `/plugin marketplace update flutter-cn`.
+
+### Option B — Manual (CLI)
+
+Install `fcn` once per machine:
 
 ```sh
+# macOS / Linux
 curl -fsSL https://raw.githubusercontent.com/YeeJiaWei/flutter-cn/main/install.sh | bash
 ```
 
-Windows (PowerShell):
-
 ```powershell
+# Windows (PowerShell)
 irm https://raw.githubusercontent.com/YeeJiaWei/flutter-cn/main/install.ps1 | iex
 ```
 
-Then, quick start in a project:
+The installer downloads the prebuilt `fcn` for your OS from the latest
+[release](https://github.com/YeeJiaWei/flutter-cn/releases), clones the store to `~/.fcn/store`
+and adds `~/.fcn/bin` to your PATH. Then, in a project:
 
 ```sh
 cd your_app
-fcn init          # writes fcn.json (source, dir)
-fcn add button     # copy a snippet by name, folder/name, or symbol
+fcn init                        # writes fcn.json; components go to lib/ui/components
+fcn docs                        # which component for which job
+fcn docs PrimaryButton          # usage doc for one component
+fcn add PrimaryButton showConfirmDialog   # copy by file name, folder/name, or symbol
+fcn diff                        # compare your copies with the store
+fcn upgrade                     # update fcn and the store
 ```
 
-See `cli/README.md` for the full command reference.
+`fcn add` copies the file and every component it imports, unchanged, and runs
+`flutter pub add` for any package it needs. See [`cli/README.md`](cli/README.md) for every
+command and option (`--dir`, `--source` for a fork, `--dry-run`, `--overwrite`).
+
+**No CLI at all?** Copy the `.dart` file from `components/<folder>/` (and any component it
+imports) into your project by hand, and read its doc in `docs/components/<folder>/`. The
+[Convention](#convention) below applies either way.
 
 ## Browsing the catalogue
 
@@ -39,39 +84,12 @@ cd widgetbook
 flutter run -d chrome   # or: flutter run -d macos
 ```
 
-See `widgetbook/README.md` for how it imports the store and how to add a use case for a
-new snippet.
-
-## Claude Code plugin
-
-For a project using Claude Code, this is the only manual step:
-
-```
-/plugin marketplace add YeeJiaWei/flutter-cn
-/plugin install flutter-cn@flutter-cn
-```
-
-That's it — nothing else to install by hand. Claude bootstraps `fcn` itself the first time it
-needs it (no prebuilt release yet on this OS/arch falls back to a source build, same as the
-installers above), runs `fcn init`/`fcn add` for you, and reaches for `fcn docs` before
-hand-writing a new widget. See the plugin's own `plugins/flutter-cn/skills/*/SKILL.md` for
-what each skill does, and `CLAUDE.md`'s "Claude Code plugin" section for the plugin's layout
-and how to test it locally.
+See `widgetbook/README.md` for how it imports the store.
 
 ## Convention
 
-1. Install `fcn`, the store's CLI, once per machine, then pull a snippet into your project
-   with `fcn add` (see `cli/README.md`):
-   ```sh
-   curl -fsSL https://raw.githubusercontent.com/YeeJiaWei/flutter-cn/main/install.sh | bash  # once
-   cd your_app && fcn init --dir lib/ui/components                     # once per project
-   fcn add base_dialog                                                 # like `npx shadcn add`
-   ```
-   `--source <store>` points `fcn init` at a fork or local checkout instead of the default
-   store the installer cloned (`~/.fcn/store`).
-   `fcn add` copies the file (and whatever it relative-imports) unchanged into your project
-   and adds any pub package it needs. Without the CLI, copy the file by hand into the
-   project's shared widgets folder (e.g. `lib/app/ui/shared/widgets/`) instead.
+1. Pull the component into your project — via the Claude Code plugin, `fcn add`, or by hand
+   (see [Install](#install)).
 2. Rename the widget with the project's prefix (e.g. `BaseDialog` → `MxBaseDialog`,
    `showBaseDialog` → `showMxBaseDialog`), and the file to match
    (`base_dialog.dart` → `mx_base_dialog.dart`).
@@ -117,97 +135,20 @@ pickers), no extra dependency.
 
 ## Snippets
 
-### components/buttons/
+Each component links to its usage doc (when to use it, when not, example, key parameters,
+tokens to bind). From a project, `fcn docs` prints the same index.
 
-- [`components/buttons/button.dart`](docs/components/buttons/button.md) — `ButtonSize`, `PrimaryButton`, `SecondaryButton`, `OutlineButton`,
-  `PlainTextButton`. The four brand button variants sharing one internal `_Button` shell.
-
-### components/cards/
-
-- [`components/cards/card.dart`](docs/components/cards/card.md) — `SurfaceCard`. Rounded, padded surface with optional elevation
-  shadow, optional outline, and optional tap ripple.
-
-### components/chips/
-
-- [`components/chips/chip.dart`](docs/components/chips/chip.md) — `SelectableChip`. Pill-style chip with optional leading icon and
-  selected state.
-- [`components/chips/tag_list.dart`](docs/components/chips/tag_list.md) — `TagList`. `Wrap` of `SelectableChip` with single- or multi-select.
-- [`components/chips/outline_chip.dart`](docs/components/chips/outline_chip.md) — `OutlineChipVariant`, `OutlineChip`. Outlined rounded-rectangle
-  chip for a single picked/displayed value, selectable outlined or brand-filled, with an
-  optional trailing icon slot.
-
-### components/dialogs/
-
-- [`components/dialogs/base_dialog.dart`](docs/components/dialogs/base_dialog.md) — `BaseDialog` + `showBaseDialog<T>()`. A generic modal shell:
-  a rounded, padded `Dialog` wrapping a `Column` of arbitrary children. No icon, no title, no
-  buttons — those belong in the project's own widget built on top of this shell.
-- [`components/dialogs/dialog_icon.dart`](docs/components/dialogs/dialog_icon.md) — `DialogIcon`. Brand-colored circle icon slot for a dialog's
-  illustration (icon or arbitrary child).
-- [`components/dialogs/confirm_dialog.dart`](docs/components/dialogs/confirm_dialog.md) — `showConfirmDialog()`. Title/message `AlertDialog` with a
-  confirm button and an optional cancel button, resolving to `true`/`false`/`null`.
-
-### components/feedback/
-
-- [`components/feedback/badge.dart`](docs/components/feedback/badge.md) — `CountBadge`. Small colored pill for counts/status markers.
-- [`components/feedback/empty_state.dart`](docs/components/feedback/empty_state.md) — `EmptyState`. Icon-or-image + title + subtitle + optional
-  CTA button placeholder.
-- [`components/feedback/loading.dart`](docs/components/feedback/loading.md) — `LoadingIndicator`. Centered spinner with optional message.
-- [`components/feedback/rating_stars.dart`](docs/components/feedback/rating_stars.md) — `RatingStars`. 5-star rating, read-only or interactive with
-  half-star precision.
-- [`components/feedback/skeleton.dart`](docs/components/feedback/skeleton.md) — `Skeleton` (+ `.line`, `.avatar`, `.card` factories). Animated
-  shimmer placeholder.
-- [`components/feedback/snackbar.dart`](docs/components/feedback/snackbar.md) — `Toast`. Overlay-based top-anchored toast with slide/fade
-  in-out and swipe-to-dismiss (`success`/`error`/`info`, each takes a `BuildContext`).
-- [`components/feedback/status_pill.dart`](docs/components/feedback/status_pill.md) — `StatusPillVariant`, `StatusPill`. Read-only colored status
-  chip, filled or outlined.
-
-### components/inputs/
-
-- [`components/inputs/text_field.dart`](docs/components/inputs/text_field.md) — `FormTextField`. Labeled text input with hint/error/helper and
-  prefix/suffix slots.
-- [`components/inputs/password_field.dart`](docs/components/inputs/password_field.md) — `PasswordField`. `FormTextField` with a show/hide toggle
-  and a lock icon.
-- [`components/inputs/phone_field.dart`](docs/components/inputs/phone_field.md) — `CountryCode`, `PhoneField`. Digits-only phone input with a
-  fixed country-code prefix (defaults to `+60`).
-
-### components/layout/
-
-- [`components/layout/app_bar.dart`](docs/components/layout/app_bar.md) — `TopBar`. `AppBar` wrapper with a back button (pop-or-fallback)
-  and an optional wizard progress bar.
-- [`components/layout/divider.dart`](docs/components/layout/divider.md) — `FadingDivider`. Hairline divider that fades toward both ends.
-- [`components/layout/header_title.dart`](docs/components/layout/header_title.md) — `HeaderTitle`. Standardised large page-title text style.
-- [`components/layout/page_header.dart`](docs/components/layout/page_header.md) — `PageHeader`. Tab-page top bar matching `AppBar` geometry,
-  title-or-leading plus trailing actions.
-- [`components/layout/page_dots.dart`](docs/components/layout/page_dots.md) — `PageDots`. Row of animated pill dots indicating the current page
-  of a carousel.
-- [`components/layout/section_header.dart`](docs/components/layout/section_header.md) — `SectionHeader`. Bold title with an optional trailing
-  text link.
-- [`components/layout/list_tile.dart`](docs/components/layout/list_tile.md) — `InfoListTile`. 56px list row with leading icon/widget, title,
-  subtitle, trailing slot.
-- [`components/layout/progress_stepper.dart`](docs/components/layout/progress_stepper.md) — `ProgressStepper`. Wizard progress bar as connected
-  segments.
-- [`components/layout/pullable_empty.dart`](docs/components/layout/pullable_empty.md) — `PullableEmpty`. Makes an empty/error state scrollable so a
-  parent `RefreshIndicator` still detects pull gestures.
-
-### components/media/
-
-- [`components/media/avatar.dart`](docs/components/media/avatar.md) — `AvatarSize`, `Avatar`. Circular avatar with network image and
-  initials fallback.
-- [`components/media/glass_label.dart`](docs/components/media/glass_label.md) — `GlassLabel`. Frosted-glass pill label to overlay on imagery.
-- [`components/media/network_image.dart`](docs/components/media/network_image.md) — `NetImage`. `Image.network`-backed drop-in for a
-  `CachedNetworkImage`-shaped API (placeholder/error builders).
-- [`components/media/svg_icon.dart`](docs/components/media/svg_icon.md) — `SvgIcon`. Thin sized, tintable wrapper over `SvgPicture.asset`.
-  Needs `flutter_svg`.
-
-### components/pickers/
-
-- [`components/pickers/dob_picker.dart`](docs/components/pickers/dob_picker.md) — `showDobPicker()`. Bottom-sheet day/month/year wheel picker.
-- [`components/pickers/height_picker.dart`](docs/components/pickers/height_picker.md) — `showHeightPicker()`. Bottom-sheet single-column
-  centimetre wheel picker.
-- [`components/pickers/year_picker.dart`](docs/components/pickers/year_picker.md) — `showYearPicker()`. Bottom-sheet single-column year wheel
-  picker, newest year first.
-- [`components/pickers/photo_crop_page.dart`](docs/components/pickers/photo_crop_page.md) — `PhotoCropPage`. Full-screen 4:3 portrait crop page.
-  Needs `crop_your_image`.
+| Folder | Components |
+|---|---|
+| `buttons/` | [button](docs/components/buttons/button.md) |
+| `cards/` | [card](docs/components/cards/card.md) |
+| `chips/` | [chip](docs/components/chips/chip.md), [outline_chip](docs/components/chips/outline_chip.md), [tag_list](docs/components/chips/tag_list.md) |
+| `dialogs/` | [base_dialog](docs/components/dialogs/base_dialog.md), [confirm_dialog](docs/components/dialogs/confirm_dialog.md), [dialog_icon](docs/components/dialogs/dialog_icon.md) |
+| `feedback/` | [badge](docs/components/feedback/badge.md), [empty_state](docs/components/feedback/empty_state.md), [loading](docs/components/feedback/loading.md), [rating_stars](docs/components/feedback/rating_stars.md), [skeleton](docs/components/feedback/skeleton.md), [snackbar](docs/components/feedback/snackbar.md), [status_pill](docs/components/feedback/status_pill.md) |
+| `inputs/` | [password_field](docs/components/inputs/password_field.md), [phone_field](docs/components/inputs/phone_field.md), [text_field](docs/components/inputs/text_field.md) |
+| `layout/` | [app_bar](docs/components/layout/app_bar.md), [divider](docs/components/layout/divider.md), [header_title](docs/components/layout/header_title.md), [list_tile](docs/components/layout/list_tile.md), [page_dots](docs/components/layout/page_dots.md), [page_header](docs/components/layout/page_header.md), [progress_stepper](docs/components/layout/progress_stepper.md), [pullable_empty](docs/components/layout/pullable_empty.md), [section_header](docs/components/layout/section_header.md) |
+| `media/` | [avatar](docs/components/media/avatar.md), [glass_label](docs/components/media/glass_label.md), [network_image](docs/components/media/network_image.md), [svg_icon](docs/components/media/svg_icon.md) |
+| `pickers/` | [dob_picker](docs/components/pickers/dob_picker.md), [height_picker](docs/components/pickers/height_picker.md), [photo_crop_page](docs/components/pickers/photo_crop_page.md), [year_picker](docs/components/pickers/year_picker.md) |
 
 ## Releasing
 
