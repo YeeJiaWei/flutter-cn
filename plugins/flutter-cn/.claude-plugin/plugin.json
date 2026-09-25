@@ -1,0 +1,8 @@
+{
+  "name": "flutter-cn",
+  "description": "flutter-cn component store: skills and a project-detection hook so Claude reaches for `fcn docs`/`fcn add` instead of hand-writing Flutter UI.",
+  "version": "0.1.0",
+  "author": { "name": "Yee Jia Wei" },
+  "homepage": "https://github.com/YeeJiaWei/flutter-cn",
+  "repository": "https://github.com/YeeJiaWei/flutter-cn"
+}

@@ -42,6 +42,22 @@ flutter run -d chrome   # or: flutter run -d macos
 See `widgetbook/README.md` for how it imports the store and how to add a use case for a
 new snippet.
 
+## Claude Code plugin
+
+For a project using Claude Code, this is the only manual step:
+
+```
+/plugin marketplace add YeeJiaWei/flutter-cn
+/plugin install flutter-cn@flutter-cn
+```
+
+That's it — nothing else to install by hand. Claude bootstraps `fcn` itself the first time it
+needs it (no prebuilt release yet on this OS/arch falls back to a source build, same as the
+installers above), runs `fcn init`/`fcn add` for you, and reaches for `fcn docs` before
+hand-writing a new widget. See the plugin's own `plugins/flutter-cn/skills/*/SKILL.md` for
+what each skill does, and `CLAUDE.md`'s "Claude Code plugin" section for the plugin's layout
+and how to test it locally.
+
 ## Convention
 
 1. Install `fcn`, the store's CLI, once per machine, then pull a snippet into your project
@@ -103,94 +119,94 @@ pickers), no extra dependency.
 
 ### components/buttons/
 
-- `components/buttons/button.dart` — `ButtonSize`, `PrimaryButton`, `SecondaryButton`, `OutlineButton`,
+- [`components/buttons/button.dart`](docs/components/buttons/button.md) — `ButtonSize`, `PrimaryButton`, `SecondaryButton`, `OutlineButton`,
   `PlainTextButton`. The four brand button variants sharing one internal `_Button` shell.
 
 ### components/cards/
 
-- `components/cards/card.dart` — `SurfaceCard`. Rounded, padded surface with optional elevation
+- [`components/cards/card.dart`](docs/components/cards/card.md) — `SurfaceCard`. Rounded, padded surface with optional elevation
   shadow, optional outline, and optional tap ripple.
 
 ### components/chips/
 
-- `components/chips/chip.dart` — `SelectableChip`. Pill-style chip with optional leading icon and
+- [`components/chips/chip.dart`](docs/components/chips/chip.md) — `SelectableChip`. Pill-style chip with optional leading icon and
   selected state.
-- `components/chips/tag_list.dart` — `TagList`. `Wrap` of `SelectableChip` with single- or multi-select.
-- `components/chips/outline_chip.dart` — `OutlineChipVariant`, `OutlineChip`. Outlined rounded-rectangle
+- [`components/chips/tag_list.dart`](docs/components/chips/tag_list.md) — `TagList`. `Wrap` of `SelectableChip` with single- or multi-select.
+- [`components/chips/outline_chip.dart`](docs/components/chips/outline_chip.md) — `OutlineChipVariant`, `OutlineChip`. Outlined rounded-rectangle
   chip for a single picked/displayed value, selectable outlined or brand-filled, with an
   optional trailing icon slot.
 
 ### components/dialogs/
 
-- `components/dialogs/base_dialog.dart` — `BaseDialog` + `showBaseDialog<T>()`. A generic modal shell:
+- [`components/dialogs/base_dialog.dart`](docs/components/dialogs/base_dialog.md) — `BaseDialog` + `showBaseDialog<T>()`. A generic modal shell:
   a rounded, padded `Dialog` wrapping a `Column` of arbitrary children. No icon, no title, no
   buttons — those belong in the project's own widget built on top of this shell.
-- `components/dialogs/dialog_icon.dart` — `DialogIcon`. Brand-colored circle icon slot for a dialog's
+- [`components/dialogs/dialog_icon.dart`](docs/components/dialogs/dialog_icon.md) — `DialogIcon`. Brand-colored circle icon slot for a dialog's
   illustration (icon or arbitrary child).
-- `components/dialogs/confirm_dialog.dart` — `showConfirmDialog()`. Title/message `AlertDialog` with a
+- [`components/dialogs/confirm_dialog.dart`](docs/components/dialogs/confirm_dialog.md) — `showConfirmDialog()`. Title/message `AlertDialog` with a
   confirm button and an optional cancel button, resolving to `true`/`false`/`null`.
 
 ### components/feedback/
 
-- `components/feedback/badge.dart` — `CountBadge`. Small colored pill for counts/status markers.
-- `components/feedback/empty_state.dart` — `EmptyState`. Icon-or-image + title + subtitle + optional
+- [`components/feedback/badge.dart`](docs/components/feedback/badge.md) — `CountBadge`. Small colored pill for counts/status markers.
+- [`components/feedback/empty_state.dart`](docs/components/feedback/empty_state.md) — `EmptyState`. Icon-or-image + title + subtitle + optional
   CTA button placeholder.
-- `components/feedback/loading.dart` — `LoadingIndicator`. Centered spinner with optional message.
-- `components/feedback/rating_stars.dart` — `RatingStars`. 5-star rating, read-only or interactive with
+- [`components/feedback/loading.dart`](docs/components/feedback/loading.md) — `LoadingIndicator`. Centered spinner with optional message.
+- [`components/feedback/rating_stars.dart`](docs/components/feedback/rating_stars.md) — `RatingStars`. 5-star rating, read-only or interactive with
   half-star precision.
-- `components/feedback/skeleton.dart` — `Skeleton` (+ `.line`, `.avatar`, `.card` factories). Animated
+- [`components/feedback/skeleton.dart`](docs/components/feedback/skeleton.md) — `Skeleton` (+ `.line`, `.avatar`, `.card` factories). Animated
   shimmer placeholder.
-- `components/feedback/snackbar.dart` — `Toast`. Overlay-based top-anchored toast with slide/fade
+- [`components/feedback/snackbar.dart`](docs/components/feedback/snackbar.md) — `Toast`. Overlay-based top-anchored toast with slide/fade
   in-out and swipe-to-dismiss (`success`/`error`/`info`, each takes a `BuildContext`).
-- `components/feedback/status_pill.dart` — `StatusPillVariant`, `StatusPill`. Read-only colored status
+- [`components/feedback/status_pill.dart`](docs/components/feedback/status_pill.md) — `StatusPillVariant`, `StatusPill`. Read-only colored status
   chip, filled or outlined.
 
 ### components/inputs/
 
-- `components/inputs/text_field.dart` — `FormTextField`. Labeled text input with hint/error/helper and
+- [`components/inputs/text_field.dart`](docs/components/inputs/text_field.md) — `FormTextField`. Labeled text input with hint/error/helper and
   prefix/suffix slots.
-- `components/inputs/password_field.dart` — `PasswordField`. `FormTextField` with a show/hide toggle
+- [`components/inputs/password_field.dart`](docs/components/inputs/password_field.md) — `PasswordField`. `FormTextField` with a show/hide toggle
   and a lock icon.
-- `components/inputs/phone_field.dart` — `CountryCode`, `PhoneField`. Digits-only phone input with a
+- [`components/inputs/phone_field.dart`](docs/components/inputs/phone_field.md) — `CountryCode`, `PhoneField`. Digits-only phone input with a
   fixed country-code prefix (defaults to `+60`).
 
 ### components/layout/
 
-- `components/layout/app_bar.dart` — `TopBar`. `AppBar` wrapper with a back button (pop-or-fallback)
+- [`components/layout/app_bar.dart`](docs/components/layout/app_bar.md) — `TopBar`. `AppBar` wrapper with a back button (pop-or-fallback)
   and an optional wizard progress bar.
-- `components/layout/divider.dart` — `FadingDivider`. Hairline divider that fades toward both ends.
-- `components/layout/header_title.dart` — `HeaderTitle`. Standardised large page-title text style.
-- `components/layout/page_header.dart` — `PageHeader`. Tab-page top bar matching `AppBar` geometry,
+- [`components/layout/divider.dart`](docs/components/layout/divider.md) — `FadingDivider`. Hairline divider that fades toward both ends.
+- [`components/layout/header_title.dart`](docs/components/layout/header_title.md) — `HeaderTitle`. Standardised large page-title text style.
+- [`components/layout/page_header.dart`](docs/components/layout/page_header.md) — `PageHeader`. Tab-page top bar matching `AppBar` geometry,
   title-or-leading plus trailing actions.
-- `components/layout/page_dots.dart` — `PageDots`. Row of animated pill dots indicating the current page
+- [`components/layout/page_dots.dart`](docs/components/layout/page_dots.md) — `PageDots`. Row of animated pill dots indicating the current page
   of a carousel.
-- `components/layout/section_header.dart` — `SectionHeader`. Bold title with an optional trailing
+- [`components/layout/section_header.dart`](docs/components/layout/section_header.md) — `SectionHeader`. Bold title with an optional trailing
   text link.
-- `components/layout/list_tile.dart` — `InfoListTile`. 56px list row with leading icon/widget, title,
+- [`components/layout/list_tile.dart`](docs/components/layout/list_tile.md) — `InfoListTile`. 56px list row with leading icon/widget, title,
   subtitle, trailing slot.
-- `components/layout/progress_stepper.dart` — `ProgressStepper`. Wizard progress bar as connected
+- [`components/layout/progress_stepper.dart`](docs/components/layout/progress_stepper.md) — `ProgressStepper`. Wizard progress bar as connected
   segments.
-- `components/layout/pullable_empty.dart` — `PullableEmpty`. Makes an empty/error state scrollable so a
+- [`components/layout/pullable_empty.dart`](docs/components/layout/pullable_empty.md) — `PullableEmpty`. Makes an empty/error state scrollable so a
   parent `RefreshIndicator` still detects pull gestures.
 
 ### components/media/
 
-- `components/media/avatar.dart` — `AvatarSize`, `Avatar`. Circular avatar with network image and
+- [`components/media/avatar.dart`](docs/components/media/avatar.md) — `AvatarSize`, `Avatar`. Circular avatar with network image and
   initials fallback.
-- `components/media/glass_label.dart` — `GlassLabel`. Frosted-glass pill label to overlay on imagery.
-- `components/media/network_image.dart` — `NetImage`. `Image.network`-backed drop-in for a
+- [`components/media/glass_label.dart`](docs/components/media/glass_label.md) — `GlassLabel`. Frosted-glass pill label to overlay on imagery.
+- [`components/media/network_image.dart`](docs/components/media/network_image.md) — `NetImage`. `Image.network`-backed drop-in for a
   `CachedNetworkImage`-shaped API (placeholder/error builders).
-- `components/media/svg_icon.dart` — `SvgIcon`. Thin sized, tintable wrapper over `SvgPicture.asset`.
+- [`components/media/svg_icon.dart`](docs/components/media/svg_icon.md) — `SvgIcon`. Thin sized, tintable wrapper over `SvgPicture.asset`.
   Needs `flutter_svg`.
 
 ### components/pickers/
 
-- `components/pickers/dob_picker.dart` — `showDobPicker()`. Bottom-sheet day/month/year wheel picker.
-- `components/pickers/height_picker.dart` — `showHeightPicker()`. Bottom-sheet single-column
+- [`components/pickers/dob_picker.dart`](docs/components/pickers/dob_picker.md) — `showDobPicker()`. Bottom-sheet day/month/year wheel picker.
+- [`components/pickers/height_picker.dart`](docs/components/pickers/height_picker.md) — `showHeightPicker()`. Bottom-sheet single-column
   centimetre wheel picker.
-- `components/pickers/year_picker.dart` — `showYearPicker()`. Bottom-sheet single-column year wheel
+- [`components/pickers/year_picker.dart`](docs/components/pickers/year_picker.md) — `showYearPicker()`. Bottom-sheet single-column year wheel
   picker, newest year first.
-- `components/pickers/photo_crop_page.dart` — `PhotoCropPage`. Full-screen 4:3 portrait crop page.
+- [`components/pickers/photo_crop_page.dart`](docs/components/pickers/photo_crop_page.md) — `PhotoCropPage`. Full-screen 4:3 portrait crop page.
   Needs `crop_your_image`.
 
 ## Releasing

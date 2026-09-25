@@ -64,14 +64,20 @@ Sibling projects that consume it live next door under `~/projects/etcteam/` (the
 2. Place it under `components/`, in the folder that matches its role: `buttons/ cards/
    chips/ dialogs/ feedback/ inputs/ layout/ media/ pickers/`. Add a folder only when none
    fits. Nothing but component folders lives in `components/`; tooling stays at the root.
-3. Add one line to the README catalogue (path, class(es), one-phrase purpose) and, if a pub
-   dependency is needed, one line to "Dependencies some snippets need".
-4. Add its Widgetbook use case (see "Widgetbook catalogue" below). A snippet without a use
+3. Add one line to the README catalogue (path, class(es), one-phrase purpose), linking it to
+   its doc under `docs/components/`, and, if a pub dependency is needed, one line to
+   "Dependencies some snippets need".
+4. Write its usage doc at `docs/components/<folder>/<file>.md` (front matter `name`, `symbols`,
+   `use_when`, `avoid_when`, `related`, then When to use / When not to use / Usage / Key
+   parameters / Bind to your tokens). A snippet without a doc is not done; `fcn docs --check`
+   must pass (it fails on a missing doc, an orphaned doc, missing `use_when`/`avoid_when`, a
+   `symbols` mismatch, or an unresolved `related` entry).
+5. Add its Widgetbook use case (see "Widgetbook catalogue" below). A snippet without a use
    case is not done.
-5. Verify from `widgetbook/`: `flutter analyze` clean and `flutter build web` succeeds. Every
+6. Verify from `widgetbook/`: `flutter analyze` clean and `flutter build web` succeeds. Every
    snippet is imported by a use case, so this compiles the whole store. Do this for every
    change; there is no CI here.
-6. If the snippet came from a project, note that project and date in the README's
+7. If the snippet came from a project, note that project and date in the README's
    provenance paragraph when it is the first snippet from that source.
 
 There is no registry to update: `fcn` scans `components/` at runtime, and Widgetbook sees
@@ -143,6 +149,41 @@ Use `fcn add` (or copy by hand per the README), rename with the project prefix i
 bind tokens, and customise on top. Do not edit the store to suit one
 project's look. If a project's customisation reveals a missing generic knob, add the knob
 here as a plain parameter with a literal default, not the project's value.
+
+## Claude Code plugin
+
+This repo publishes itself as a Claude Code marketplace, so a consuming project installs it
+with `/plugin marketplace add YeeJiaWei/flutter-cn` then `/plugin install flutter-cn@flutter-cn`
+— see the README's "Claude Code plugin" section. Layout:
+
+```
+.claude-plugin/marketplace.json          # marketplace "flutter-cn", owner Yee Jia Wei
+plugins/flutter-cn/
+  .claude-plugin/plugin.json             # plugin manifest, version bumped on every change
+  hooks/hooks.json                       # SessionStart + UserPromptSubmit → detect script
+  scripts/
+    detect-flutter-cn.sh                 # context injection (Flutter project detection)
+    fcn.sh                               # self-bootstrapping fcn wrapper, see below
+  skills/
+    use-components/SKILL.md              # auto: reach for flutter-cn before hand-writing UI
+    docs/SKILL.md                        # /flutter-cn:docs [name] + auto doc lookups
+    add/SKILL.md                         # /flutter-cn:add <names…>
+    init/SKILL.md                        # /flutter-cn:init [--dir <path>]
+```
+
+- **Installing the plugin is the only manual step.** Every skill and the hook call `fcn`
+  only through `"${CLAUDE_PLUGIN_ROOT}/scripts/fcn.sh"`, never a bare `fcn` — the wrapper
+  resolves an installed `fcn` (`PATH`, then `~/.fcn/bin/fcn[.exe]`), or installs it
+  non-interactively (the same `install.sh`/`install.ps1` this README documents) if there
+  isn't one, then execs the real command. Nothing tells the user to run an installer
+  themselves. `use-components`, `docs` and `add` likewise auto-run `fcn.sh init` (default
+  `--dir lib/ui/components`) the first time they hit a project with no `fcn.json`.
+- **Plugin edits need a `version` bump** in `plugins/flutter-cn/.claude-plugin/plugin.json`
+  (semver) on every change to the plugin, so consuming projects pick it up on their next
+  `/plugin update` (or reinstall).
+- **Test locally** before publishing a change: from this repo, `/plugin marketplace add ./`
+  then `/plugin install flutter-cn@flutter-cn` in a Flutter project, and confirm the hook's
+  context block and the skills behave as expected.
 
 ## Git
 
