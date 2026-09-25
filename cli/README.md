@@ -40,7 +40,7 @@ Windows), clone/pull the store to `~/.fcn/store`, and add `~/.fcn/bin` to your P
 ```sh
 cd your_app
 
-fcn init --source <store path or git URL> --dir lib/ui/snippets   # writes fcn.json
+fcn init --dir lib/ui/snippets                                    # writes fcn.json
 fcn list                                                          # browse what's available
 fcn add button confirm_dialog PrimaryButton                       # copy by file name or symbol
 fcn diff                                                          # see what's changed since you copied
@@ -48,7 +48,10 @@ fcn upgrade                                                       # re-run the h
 fcn --version                                                     # print the installed fcn version
 ```
 
-- `fcn init` asks for `--source`/`--dir` interactively if you don't pass them.
+- `fcn init` defaults to the store the installer cloned (`~/.fcn/store`). Pass `--source
+  <path or git URL>` only to point at a fork or a local checkout of the store instead. If
+  `--dir` isn't given and you're at an interactive terminal, it's asked for; otherwise it
+  defaults to `lib/ui`.
 - `fcn add <name...>` matches a name against a snippet file (`button`, `dialogs/confirm_dialog`)
   or a public symbol it exports (`PrimaryButton`, `showConfirmDialog`). When a bare name matches
   more than one file, pass `folder/name` instead. It follows relative imports to pull in
@@ -65,11 +68,14 @@ Written by `fcn init` at the project root, next to `pubspec.yaml`:
 
 ```json
 {
-  "source": "https://…/flutter-snippets.git",
+  "source": null,
   "dir": "lib/ui/snippets",
   "installed": { "buttons/button.dart": "<store commit sha>" }
 }
 ```
+
+`source` is `null` for the default store (`~/.fcn/store`, the one the installer cloned), or
+a local path/git URL when you passed `--source`.
 
 `installed` records where each file came from without editing the file itself; `fcn diff`
 reads it to know what to compare.

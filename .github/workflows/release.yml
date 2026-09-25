@@ -4,23 +4,35 @@ on:
   push:
     tags:
       - 'v*'
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: 'Tag to release, e.g. v0.1.0'
+        required: true
+        type: string
 
 jobs:
   check-version:
     runs-on: ubuntu-latest
+    env:
+      TAG: ${{ github.event.inputs.tag || github.ref_name }}
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: ${{ env.TAG }}
       - name: Tag must match cli/pubspec.yaml version
         run: |
-          tag_version="${GITHUB_REF_NAME#v}"
+          tag_version="${TAG#v}"
           pubspec_version="$(grep -m1 '^version:' cli/pubspec.yaml | sed 's/version:[[:space:]]*//')"
           if [ "$tag_version" != "$pubspec_version" ]; then
-            echo "::error::Tag $GITHUB_REF_NAME (version $tag_version) does not match cli/pubspec.yaml version $pubspec_version"
+            echo "::error::Tag $TAG (version $tag_version) does not match cli/pubspec.yaml version $pubspec_version"
             exit 1
           fi
 
   build:
     needs: check-version
+    env:
+      TAG: ${{ github.event.inputs.tag || github.ref_name }}
     strategy:
       matrix:
         include:
@@ -35,6 +47,8 @@ jobs:
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: ${{ env.TAG }}
       - uses: dart-lang/setup-dart@v1
         with:
           sdk: stable
@@ -49,7 +63,7 @@ jobs:
         run: dart test
       - name: Compile ${{ matrix.asset }}
         working-directory: cli
-        run: dart compile exe bin/fcn.dart -DFCN_VERSION=${{ github.ref_name }} -o ${{ matrix.asset }}
+        run: dart compile exe bin/fcn.dart -DFCN_VERSION=$TAG -o ${{ matrix.asset }}
       - uses: actions/upload-artifact@v4
         with:
           name: ${{ matrix.asset }}
@@ -60,6 +74,8 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: write
+    env:
+      TAG: ${{ github.event.inputs.tag || github.ref_name }}
     steps:
       - uses: actions/download-artifact@v4
         with:
@@ -72,5 +88,6 @@ jobs:
           sha256sum * > checksums.txt
       - uses: softprops/action-gh-release@v2
         with:
+          tag_name: ${{ env.TAG }}
           files: release/*
           generate_release_notes: true

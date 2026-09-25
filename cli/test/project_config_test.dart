@@ -27,4 +27,24 @@ void main() {
   test('tryLoad returns null when fcn.json is missing', () {
     expect(ProjectConfig.tryLoad(projectRoot), isNull);
   });
+
+  test('round-trips with a null source', () {
+    final config = ProjectConfig(source: null, dir: 'lib/ui', installed: {});
+
+    config.save(projectRoot);
+    final written = ProjectConfig.file(projectRoot).readAsStringSync();
+    expect(written, contains('"source": null'));
+
+    final loaded = ProjectConfig.tryLoad(projectRoot)!;
+    expect(loaded.source, isNull);
+    expect(loaded.dir, 'lib/ui');
+  });
+
+  test('tryLoad tolerates a missing source key', () {
+    ProjectConfig.file(projectRoot).writeAsStringSync('{"dir": "lib/ui", "installed": {}}');
+
+    final loaded = ProjectConfig.tryLoad(projectRoot)!;
+    expect(loaded.source, isNull);
+    expect(loaded.dir, 'lib/ui');
+  });
 }

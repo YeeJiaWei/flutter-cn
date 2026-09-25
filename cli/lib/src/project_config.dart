@@ -8,7 +8,8 @@ import 'package:path/path.dart' as p;
 class ProjectConfig {
   ProjectConfig({required this.source, required this.dir, required this.installed});
 
-  String source;
+  /// The store: a local path or a git URL, or null to use `~/.fcn/store`.
+  String? source;
   String dir;
 
   /// Snippet path -> the store commit sha it was copied from.
@@ -23,7 +24,7 @@ class ProjectConfig {
     final json = jsonDecode(configFile.readAsStringSync()) as Map<String, dynamic>;
     final installedJson = (json['installed'] as Map<String, dynamic>?) ?? {};
     return ProjectConfig(
-      source: json['source'] as String,
+      source: json['source'] as String?,
       dir: json['dir'] as String,
       installed: installedJson.map((k, v) => MapEntry(k, v as String)),
     );

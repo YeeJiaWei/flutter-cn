@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:fcn/src/store_cache.dart';
+import 'package:fcn/src/store_cache_exception.dart';
 import 'package:path/path.dart' as p;
 import 'package:test/test.dart';
 
@@ -44,5 +45,40 @@ void main() {
     // a second resolve should pull, not fail because the clone already exists
     final resolvedSecond = StoreCache(homeDir: home).resolve(source);
     expect(resolvedSecond.path, resolvedFirst.path);
+  });
+
+  test('a null source resolves to <home>/store when it exists', () {
+    final home = Directory.systemTemp.createTempSync('fcn_home_');
+    addTearDown(() => home.deleteSync(recursive: true));
+
+    final store = Directory(p.join(home.path, 'store'))..createSync(recursive: true);
+    Process.runSync('git', ['init', '-q'], workingDirectory: store.path);
+    Process.runSync('git', ['config', 'user.email', 'test@example.com'], workingDirectory: store.path);
+    Process.runSync('git', ['config', 'user.name', 'Test'], workingDirectory: store.path);
+    File(p.join(store.path, 'buttons', 'button.dart'))
+      ..parent.createSync(recursive: true)
+      ..writeAsStringSync('class PrimaryButton {}');
+    Process.runSync('git', ['add', '.'], workingDirectory: store.path);
+    Process.runSync('git', ['commit', '-q', '-m', 'init'], workingDirectory: store.path);
+
+    final resolved = StoreCache(homeDir: home).resolve(null);
+
+    expect(resolved.path, store.path);
+  });
+
+  test('a null source fails clearly when no store is installed', () {
+    final home = Directory.systemTemp.createTempSync('fcn_home_');
+    addTearDown(() => home.deleteSync(recursive: true));
+
+    expect(
+      () => StoreCache(homeDir: home).resolve(null),
+      throwsA(
+        isA<StoreCacheException>().having(
+          (e) => e.toString(),
+          'message',
+          allOf(contains("isn't installed properly"), contains('install.sh')),
+        ),
+      ),
+    );
   });
 }

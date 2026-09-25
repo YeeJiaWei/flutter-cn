@@ -48,9 +48,11 @@ new snippet.
    with `fcn add` (see `cli/README.md`):
    ```sh
    curl -fsSL https://raw.githubusercontent.com/YeeJiaWei/flutter-cn/main/install.sh | bash  # once
-   cd your_app && fcn init --source <store> --dir lib/ui/snippets       # once per project
+   cd your_app && fcn init --dir lib/ui/snippets                       # once per project
    fcn add base_dialog                                                 # like `npx shadcn add`
    ```
+   `--source <store>` points `fcn init` at a fork or local checkout instead of the default
+   store the installer cloned (`~/.fcn/store`).
    `fcn add` copies the file (and whatever it relative-imports) unchanged into your project
    and adds any pub package it needs. Without the CLI, copy the file by hand into the
    project's shared widgets folder (e.g. `lib/app/ui/shared/widgets/`) instead.
@@ -200,3 +202,7 @@ pickers), no extra dependency.
 Pushing the tag triggers the `Release` workflow, which builds the `fcn` binary for macOS
 (arm64 + x64), Linux and Windows, and publishes them with `checksums.txt` to a GitHub
 Release for that tag. The install scripts then pick up the new release automatically.
+
+If a tag push doesn't trigger a run (e.g. the tag was pushed together with the first push
+of the repo), re-run it without re-tagging: Actions → Release → Run workflow, entering the
+existing tag (e.g. `v0.1.0`).
