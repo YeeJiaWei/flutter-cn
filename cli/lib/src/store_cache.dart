@@ -76,7 +76,13 @@ class StoreCache {
   }
 
   void _run(List<String> args) {
-    final result = Process.runSync(args.first, args.sublist(1));
+    // Git paths are absolute, so run from a directory that always exists rather than a cwd
+    // that may have been deleted.
+    final result = Process.runSync(
+      args.first,
+      args.sublist(1),
+      workingDirectory: Directory.systemTemp.path,
+    );
     if (result.exitCode != 0) {
       throw StoreCacheException('${args.join(' ')} failed: ${result.stderr}');
     }
