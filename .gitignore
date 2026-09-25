@@ -6,3 +6,4 @@ widgetbook/build/
 .idea/
 .vscode/
 *.iml
+.claude/worktrees/
