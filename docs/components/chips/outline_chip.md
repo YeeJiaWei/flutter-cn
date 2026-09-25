@@ -55,6 +55,7 @@ OutlineChip(
 | `variant` | `OutlineChipVariant.outlined` | `outlined` or `filled` selected look. |
 | `onTap` | `null` | `null` renders a plain, non-interactive chip (no ripple). |
 | `trailingIcon` | `null` | Shown after the label when `selected` and `variant` is `filled`. |
+| `trailingIconGap` | `6` | Space between the label and `trailingIcon`. |
 | `backgroundColor` | `Colors.white` | Background when not filled-selected. |
 | `borderColor` | `Color(0xFFC4C9D3)` | Border color when not selected. |
 | `selectedColor` | `Color(0xFF156EFC)` | Border/fill color when selected. |

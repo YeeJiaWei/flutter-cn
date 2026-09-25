@@ -42,7 +42,8 @@ if (confirmed == true) {
   // proceed
 }
 
-// Single-dismiss notice, no cancel:
+// Single-dismiss notice, no cancel (check `mounted` after any earlier await):
+if (!context.mounted) return;
 await showConfirmDialog(
   context: context,
   title: 'Profile updated',
