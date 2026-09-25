@@ -12,7 +12,7 @@ void main() {
   test('round-trips through fcn.json', () {
     final config = ProjectConfig(
       source: '/path/to/store',
-      dir: 'lib/ui/snippets',
+      dir: 'lib/ui/components',
       installed: {'buttons/button.dart': 'abc123'},
     );
 
@@ -20,7 +20,7 @@ void main() {
     final loaded = ProjectConfig.tryLoad(projectRoot)!;
 
     expect(loaded.source, '/path/to/store');
-    expect(loaded.dir, 'lib/ui/snippets');
+    expect(loaded.dir, 'lib/ui/components');
     expect(loaded.installed, {'buttons/button.dart': 'abc123'});
   });
 

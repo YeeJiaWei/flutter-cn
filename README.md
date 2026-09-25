@@ -48,7 +48,7 @@ new snippet.
    with `fcn add` (see `cli/README.md`):
    ```sh
    curl -fsSL https://raw.githubusercontent.com/YeeJiaWei/flutter-cn/main/install.sh | bash  # once
-   cd your_app && fcn init --dir lib/ui/snippets                       # once per project
+   cd your_app && fcn init --dir lib/ui/components                     # once per project
    fcn add base_dialog                                                 # like `npx shadcn add`
    ```
    `--source <store>` points `fcn init` at a fork or local checkout instead of the default

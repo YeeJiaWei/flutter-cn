@@ -29,16 +29,16 @@ void main() {
     expect(code, 0);
     final config = ProjectConfig.tryLoad(projectRoot)!;
     expect(config.source, isNull);
-    expect(config.dir, 'lib/ui');
+    expect(config.dir, 'lib/ui/components');
   });
 
   test('init with --source and --dir writes both', () async {
     final runner = CommandRunner<int>('fcn', 'test')..addCommand(InitCommand());
-    final code = await runner.run(['init', '--source', '/path/to/store', '--dir', 'lib/ui/snippets']);
+    final code = await runner.run(['init', '--source', '/path/to/store', '--dir', 'lib/ui/components']);
 
     expect(code, 0);
     final config = ProjectConfig.tryLoad(projectRoot)!;
     expect(config.source, '/path/to/store');
-    expect(config.dir, 'lib/ui/snippets');
+    expect(config.dir, 'lib/ui/components');
   });
 }

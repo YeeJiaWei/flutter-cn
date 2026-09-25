@@ -12,7 +12,7 @@ class InitCommand extends Command<int> {
         'source',
         help: 'A fork or local store; defaults to the store the installer cloned (~/.fcn/store).',
       )
-      ..addOption('dir', help: 'Where snippets are copied to, e.g. lib/ui/snippets.');
+      ..addOption('dir', help: 'Where snippets are copied to, e.g. lib/ui/components.');
   }
 
   @override
@@ -28,11 +28,11 @@ class InitCommand extends Command<int> {
     var dir = argResults?['dir'] as String?;
 
     if (dir == null && stdin.hasTerminal) {
-      stdout.write('Directory to copy snippets into (e.g. lib/ui/snippets): ');
+      stdout.write('Directory to copy snippets into (e.g. lib/ui/components): ');
       dir = stdin.readLineSync()?.trim();
     }
     if (dir == null || dir.isEmpty) {
-      dir = 'lib/ui';
+      dir = 'lib/ui/components';
       stdout.writeln('No --dir given, defaulting to $dir');
     }
 

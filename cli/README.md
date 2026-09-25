@@ -40,7 +40,7 @@ Windows), clone/pull the store to `~/.fcn/store`, and add `~/.fcn/bin` to your P
 ```sh
 cd your_app
 
-fcn init --dir lib/ui/snippets                                    # writes fcn.json
+fcn init --dir lib/ui/components                                    # writes fcn.json
 fcn list                                                          # browse what's available
 fcn add button confirm_dialog PrimaryButton                       # copy by file name or symbol
 fcn diff                                                          # see what's changed since you copied
@@ -51,7 +51,7 @@ fcn --version                                                     # print the in
 - `fcn init` defaults to the store the installer cloned (`~/.fcn/store`). Pass `--source
   <path or git URL>` only to point at a fork or a local checkout of the store instead. If
   `--dir` isn't given and you're at an interactive terminal, it's asked for; otherwise it
-  defaults to `lib/ui`.
+  defaults to `lib/ui/components`.
 - `fcn add <name...>` matches a name against a snippet file (`button`, `dialogs/confirm_dialog`)
   or a public symbol it exports (`PrimaryButton`, `showConfirmDialog`). When a bare name matches
   more than one file, pass `folder/name` instead. It follows relative imports to pull in
@@ -69,7 +69,7 @@ Written by `fcn init` at the project root, next to `pubspec.yaml`:
 ```json
 {
   "source": null,
-  "dir": "lib/ui/snippets",
+  "dir": "lib/ui/components",
   "installed": { "buttons/button.dart": "<store commit sha>" }
 }
 ```
