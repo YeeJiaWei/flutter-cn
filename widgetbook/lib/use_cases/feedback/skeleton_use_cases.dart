@@ -1,32 +1,114 @@
 import 'package:flutter/material.dart';
 import 'package:widgetbook/widgetbook.dart';
 
+import '../../store/feedback/shimmer.dart';
 import '../../store/feedback/skeleton.dart';
+
+Shimmer _shimmer(BuildContext context, Widget child) {
+  final seed = context.knobs.int.input(label: 'Seed', initialValue: 1);
+  final baseColor = context.knobs.color(
+    label: 'Base color',
+    initialValue: const Color(0xFFECEEF1),
+  );
+  final highlightColor = context.knobs.color(
+    label: 'Highlight color',
+    initialValue: const Color(0xFFF7F8FA),
+  );
+  return Shimmer(
+    seed: seed,
+    baseColor: baseColor,
+    highlightColor: highlightColor,
+    child: child,
+  );
+}
 
 /// "Default" use case for the base [Skeleton] constructor.
 Widget skeletonUseCase(BuildContext context) {
   final width = context.knobs.double.input(label: 'Width', initialValue: 200);
   final height = context.knobs.double.input(label: 'Height', initialValue: 16);
   final radius = context.knobs.double.input(label: 'Radius', initialValue: 8);
-  return Center(child: Skeleton(width: width, height: height, radius: radius));
+  return Center(
+    child: _shimmer(
+      context,
+      Skeleton(width: width, height: height, radius: radius),
+    ),
+  );
 }
 
 /// [Skeleton.line] factory use case: full-width text-line placeholder.
 Widget skeletonLineUseCase(BuildContext context) {
-  return const Center(
-    child: SizedBox(width: 260, child: Skeleton.line()),
+  return Center(
+    child: _shimmer(
+      context,
+      const SizedBox(width: 260, child: Skeleton.line()),
+    ),
   );
 }
 
 /// [Skeleton.avatar] factory use case: circular avatar placeholder.
 Widget skeletonAvatarUseCase(BuildContext context) {
-  return const Center(child: Skeleton.avatar());
+  final size = context.knobs.double.input(label: 'Size', initialValue: 44);
+  return Center(child: _shimmer(context, Skeleton.avatar(size: size)));
 }
 
 /// [Skeleton.card] factory use case: block-shaped card placeholder.
 Widget skeletonCardUseCase(BuildContext context) {
-  return const Center(
-    child: SizedBox(width: 280, child: Skeleton.card()),
+  final height = context.knobs.double.input(label: 'Height', initialValue: 120);
+  return Center(
+    child: _shimmer(
+      context,
+      SizedBox(width: 280, child: Skeleton.card(height: height)),
+    ),
+  );
+}
+
+/// [Skeleton.text] use case: text-shaped bars driven by lines and character knobs.
+Widget skeletonTextUseCase(BuildContext context) {
+  final lines = context.knobs.int.slider(
+    label: 'Lines',
+    initialValue: 3,
+    min: 1,
+    max: 8,
+  );
+  final fontSize = context.knobs.double.slider(
+    label: 'Font size',
+    initialValue: 16,
+    min: 10,
+    max: 32,
+  );
+  final useChars = context.knobs.boolean(
+    label: 'Use characters',
+    initialValue: true,
+  );
+  final chars = context.knobs.int.input(
+    label: 'Chars (0 = random range)',
+    initialValue: 0,
+  );
+  final minChars = context.knobs.int.input(label: 'Min chars', initialValue: 8);
+  final maxChars = context.knobs.int.input(
+    label: 'Max chars',
+    initialValue: 30,
+  );
+  final text = !useChars
+      ? Skeleton.text(
+          style: TextStyle(fontSize: fontSize),
+          lines: lines,
+        )
+      : chars > 0
+      ? Skeleton.text(
+          style: TextStyle(fontSize: fontSize),
+          lines: lines,
+          chars: chars,
+        )
+      : Skeleton.text(
+          style: TextStyle(fontSize: fontSize),
+          lines: lines,
+          minChars: minChars.clamp(1, maxChars),
+          maxChars: maxChars,
+        );
+  return Padding(
+    padding: const EdgeInsets.all(24),
+    child: _shimmer(context, text),
   );
 }
 
@@ -40,6 +122,7 @@ final skeletonComponents = [
       WidgetbookUseCase(name: 'line', builder: skeletonLineUseCase),
       WidgetbookUseCase(name: 'avatar', builder: skeletonAvatarUseCase),
       WidgetbookUseCase(name: 'card', builder: skeletonCardUseCase),
+      WidgetbookUseCase(name: 'text', builder: skeletonTextUseCase),
     ],
   ),
 ];

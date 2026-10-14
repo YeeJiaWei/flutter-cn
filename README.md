@@ -119,7 +119,7 @@ where the natural drop-prefix name collides with a core Flutter widget (e.g. `Mx
 `SelectableChip`, not `Chip`; `MxCard` → `SurfaceCard`; `MxListTile` → `InfoListTile`;
 `MxTextField` → `FormTextField`; `MxDivider` → `FadingDivider`; `MxBadge` → `CountBadge`;
 `MxLoading` → `LoadingIndicator`; `MxNetworkImage` → `NetImage`; `MxAppBar` → `TopBar`;
-`MxTextButton` → `PlainTextButton`; `MxSnackbar` → `Toast`). Pick whatever name suits the
+`MxTextButton` → `PlainTextButton`; `MxSnackbar` → `Toast`). The skeleton family drops the prefix only (`MxShimmer` → `Shimmer`, `MxSkeleton` → `Skeleton`, `MxTextSkeleton` → `TextSkeleton`, `MxSkeletonBlock` → `SkeletonBlock`), and was later reworked from verolink's improved skeleton (2026-10-14) with its colours moved onto `Shimmer`. Pick whatever name suits the
 copying project — these are just collision-free defaults.
 
 ## Dependencies some snippets need
@@ -144,7 +144,7 @@ tokens to bind). From a project, `fcn docs` prints the same index.
 | `cards/` | [card](docs/components/cards/card.md) |
 | `chips/` | [chip](docs/components/chips/chip.md), [outline_chip](docs/components/chips/outline_chip.md), [tag_list](docs/components/chips/tag_list.md) |
 | `dialogs/` | [base_dialog](docs/components/dialogs/base_dialog.md), [confirm_dialog](docs/components/dialogs/confirm_dialog.md), [dialog_icon](docs/components/dialogs/dialog_icon.md) |
-| `feedback/` | [badge](docs/components/feedback/badge.md), [empty_state](docs/components/feedback/empty_state.md), [loading](docs/components/feedback/loading.md), [rating_stars](docs/components/feedback/rating_stars.md), [skeleton](docs/components/feedback/skeleton.md), [snackbar](docs/components/feedback/snackbar.md), [status_pill](docs/components/feedback/status_pill.md) |
+| `feedback/` | [badge](docs/components/feedback/badge.md), [empty_state](docs/components/feedback/empty_state.md), [loading](docs/components/feedback/loading.md), [rating_stars](docs/components/feedback/rating_stars.md), [shimmer](docs/components/feedback/shimmer.md), [skeleton](docs/components/feedback/skeleton.md), [skeleton_block](docs/components/feedback/skeleton_block.md), [snackbar](docs/components/feedback/snackbar.md), [status_pill](docs/components/feedback/status_pill.md), [text_skeleton](docs/components/feedback/text_skeleton.md) |
 | `inputs/` | [password_field](docs/components/inputs/password_field.md), [phone_field](docs/components/inputs/phone_field.md), [text_field](docs/components/inputs/text_field.md) |
 | `layout/` | [app_bar](docs/components/layout/app_bar.md), [divider](docs/components/layout/divider.md), [header_title](docs/components/layout/header_title.md), [list_tile](docs/components/layout/list_tile.md), [page_dots](docs/components/layout/page_dots.md), [page_header](docs/components/layout/page_header.md), [progress_stepper](docs/components/layout/progress_stepper.md), [pullable_empty](docs/components/layout/pullable_empty.md), [section_header](docs/components/layout/section_header.md) |
 | `media/` | [avatar](docs/components/media/avatar.md), [glass_label](docs/components/media/glass_label.md), [network_image](docs/components/media/network_image.md), [svg_icon](docs/components/media/svg_icon.md) |
