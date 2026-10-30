@@ -23,6 +23,7 @@ import 'use_cases/layout/page_header_use_cases.dart';
 import 'use_cases/layout/progress_stepper_use_cases.dart';
 import 'use_cases/layout/pullable_empty_use_cases.dart';
 import 'use_cases/layout/section_header_use_cases.dart';
+import 'use_cases/layout/tabs_use_cases.dart';
 import 'use_cases/media/avatar_use_cases.dart';
 import 'use_cases/media/glass_label_use_cases.dart';
 import 'use_cases/media/network_image_use_cases.dart';
@@ -68,6 +69,7 @@ final directories = <WidgetbookNode>[
       ...pageHeaderComponents,
       ...pageDotsComponents,
       ...sectionHeaderComponents,
+      ...tabsComponents,
       ...listTileComponents,
       ...progressStepperComponents,
       ...pullableEmptyComponents,
