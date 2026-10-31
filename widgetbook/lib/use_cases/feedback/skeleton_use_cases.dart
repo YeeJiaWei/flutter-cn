@@ -22,43 +22,68 @@ Shimmer _shimmer(BuildContext context, Widget child) {
   );
 }
 
+/// Shows [child] shimmering on a card over a tinted backdrop, so the bars read
+/// against a surface the way they would in an app instead of the bare canvas.
+Widget _preview(BuildContext context, Widget child) {
+  final backdropColor = context.knobs.color(
+    label: 'Backdrop color',
+    initialValue: const Color(0xFFE4E7EC),
+  );
+  final cardColor = context.knobs.color(
+    label: 'Card color',
+    initialValue: const Color(0xFFFFFFFF),
+  );
+  return ColoredBox(
+    color: backdropColor,
+    child: Center(
+      child: Container(
+        padding: const EdgeInsets.all(20),
+        decoration: BoxDecoration(
+          color: cardColor,
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(color: const Color(0xFFD5DAE1)),
+          boxShadow: const [
+            BoxShadow(
+              color: Color(0x14000000),
+              blurRadius: 16,
+              offset: Offset(0, 4),
+            ),
+          ],
+        ),
+        child: _shimmer(context, child),
+      ),
+    ),
+  );
+}
+
 /// "Default" use case for the base [Skeleton] constructor.
 Widget skeletonUseCase(BuildContext context) {
   final width = context.knobs.double.input(label: 'Width', initialValue: 200);
   final height = context.knobs.double.input(label: 'Height', initialValue: 16);
   final radius = context.knobs.double.input(label: 'Radius', initialValue: 8);
-  return Center(
-    child: _shimmer(
-      context,
-      Skeleton(width: width, height: height, radius: radius),
-    ),
+  return _preview(
+    context,
+    Skeleton(width: width, height: height, radius: radius),
   );
 }
 
 /// [Skeleton.line] factory use case: full-width text-line placeholder.
 Widget skeletonLineUseCase(BuildContext context) {
-  return Center(
-    child: _shimmer(
-      context,
-      const SizedBox(width: 260, child: Skeleton.line()),
-    ),
-  );
+  return _preview(context, const SizedBox(width: 260, child: Skeleton.line()));
 }
 
 /// [Skeleton.avatar] factory use case: circular avatar placeholder.
 Widget skeletonAvatarUseCase(BuildContext context) {
   final size = context.knobs.double.input(label: 'Size', initialValue: 44);
-  return Center(child: _shimmer(context, Skeleton.avatar(size: size)));
+  return _preview(context, Skeleton.avatar(size: size));
 }
 
 /// [Skeleton.card] factory use case: block-shaped card placeholder.
 Widget skeletonCardUseCase(BuildContext context) {
   final height = context.knobs.double.input(label: 'Height', initialValue: 120);
-  return Center(
-    child: _shimmer(
-      context,
-      SizedBox(width: 280, child: Skeleton.card(height: height)),
-    ),
+  return _preview(
+    context,
+    SizedBox(width: 280, child: Skeleton.card(height: height)),
   );
 }
 
@@ -106,10 +131,7 @@ Widget skeletonTextUseCase(BuildContext context) {
           minChars: minChars.clamp(1, maxChars),
           maxChars: maxChars,
         );
-  return Padding(
-    padding: const EdgeInsets.all(24),
-    child: _shimmer(context, text),
-  );
+  return _preview(context, SizedBox(width: 320, child: text));
 }
 
 /// The skeleton component group, mirroring `feedback/skeleton.dart`'s named
